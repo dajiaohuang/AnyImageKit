@@ -101,6 +101,10 @@ final class CaptureViewController: AnyImageViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         UIApplication.shared.isIdleTimerDisabled = false
+        if permissionsChecked {
+            capture.stopRunning()
+            orientationUtil.stopRunning()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -271,8 +275,6 @@ extension CaptureViewController: CaptureDelegate {
         present(controller, animated: false) { [weak self] in
             guard let self = self else { return }
             self.toolView.captureButton.stopProcessing()
-            self.capture.stopRunning()
-            self.orientationUtil.stopRunning()
         }
         #else
         if let url = FileHelper.write(photoData: photoData, utType: fileType.utType) {
@@ -313,8 +315,6 @@ extension CaptureViewController: RecorderDelegate {
         present(controller, animated: false) { [weak self] in
             guard let self = self else { return }
             self.toolView.captureButton.stopProcessing()
-            self.capture.stopRunning()
-            self.orientationUtil.stopRunning()
         }
         #else
         delegate?.capture(self, didOutput: url, type: .video)
