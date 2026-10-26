@@ -96,6 +96,10 @@ final class CaptureViewController: AnyImageViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         UIApplication.shared.isIdleTimerDisabled = true
+        if permissionsChecked {
+            capture.startRunning()
+            orientationUtil.startRunning()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -339,8 +343,6 @@ extension CaptureViewController: DeviceOrientationUtilDelegate {
 extension CaptureViewController: ImageEditorControllerDelegate {
     
     func imageEditorDidCancel(_ editor: ImageEditorController) {
-        capture.startRunning()
-        orientationUtil.startRunning()
         previewView.isRunning = true
         editor.dismiss(animated: false, completion: nil)
     }
